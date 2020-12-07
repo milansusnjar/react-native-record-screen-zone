@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, PropsWithChildren } from 'react';
 import {
   View,
   LayoutChangeEvent,
@@ -76,9 +76,11 @@ export const useRecordScreenZone = () => {
     RecordScreen.clean();
   };
 
-  const Wrapper: React.FC<Props> = (props) => {
+  const Wrapper: React.FC<Props> = (
+    props: PropsWithChildren<Props> & { x?: number; y?: number }
+  ) => {
     return (
-      <View {...props} onLayout={event => onLayout(event, props.x, props.y)}>
+      <View {...props} onLayout={(event) => onLayout(event, props.x, props.y)}>
         {props.children}
       </View>
     );
