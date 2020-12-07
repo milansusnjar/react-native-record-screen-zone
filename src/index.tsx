@@ -26,8 +26,10 @@ const useComponentLayout = () => {
     y: 0,
   });
 
-  const onLayout = useCallback((event: LayoutChangeEvent) => {
+  const onLayout = useCallback((event: LayoutChangeEvent, x?: number, y?: number) => {
     const size = event.nativeEvent.layout;
+    if (typeof x !== 'undefined') size.x = x
+    if (typeof y !== 'undefined') size.y = y
     setLayout((l) => Object.assign(l, size));
   }, []);
 
@@ -76,7 +78,7 @@ export const useRecordScreenZone = () => {
 
   const Wrapper: React.FC<Props> = (props) => {
     return (
-      <View {...props} onLayout={onLayout}>
+      <View {...props} onLayout={event => onLayout(event, props.x, props.y)}>
         {props.children}
       </View>
     );
