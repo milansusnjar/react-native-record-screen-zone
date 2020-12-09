@@ -12,9 +12,7 @@ export const extractExtension = (file: string) => {
 export const createNewFilePath = (path: string) => {
   const parsePath = path.split('/');
   const fileName = parsePath[parsePath.length - 1];
-  parsePath[
-    parsePath.length - 1
-  ] = `${createRandumFileName()}.${extractExtension(fileName)}`;
+  parsePath[parsePath.length - 1] = `pet-${fileName}`;
   return parsePath.join('/');
 };
 

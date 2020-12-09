@@ -26,12 +26,15 @@ const useComponentLayout = () => {
     y: 0,
   });
 
-  const onLayout = useCallback((event: LayoutChangeEvent, x?: number, y?: number) => {
-    const size = event.nativeEvent.layout;
-    if (typeof x !== 'undefined') size.x = x
-    if (typeof y !== 'undefined') size.y = y
-    setLayout((l) => Object.assign(l, size));
-  }, []);
+  const onLayout = useCallback(
+    (event: LayoutChangeEvent, x?: number, y?: number) => {
+      const size = event.nativeEvent.layout;
+      if (typeof x !== 'undefined') size.x = x;
+      if (typeof y !== 'undefined') size.y = y;
+      setLayout((l) => Object.assign(l, size));
+    },
+    []
+  );
 
   return { layout, onLayout };
 };
