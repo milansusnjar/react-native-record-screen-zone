@@ -10,12 +10,13 @@ import RecordScreen, {
   RecordingStartResponse,
   RecordingResponse,
 } from 'react-native-record-screen';
-import { createNewFilePath, calcCropLayout } from './util';
+import { changeExtension, createNewFilePath, calcCropLayout } from './util';
 
 interface Props extends ViewProps {}
 
 type StartRecording = () => Promise<RecordingStartResponse>;
 type StopRecording = () => Promise<RecordingResponse>;
+type TakeFrame = () => Promise<RecordingResponse>;
 type CleanRecord = () => void;
 
 const useComponentLayout = () => {
@@ -75,6 +76,26 @@ export const useRecordScreenZone = () => {
     });
   };
 
+  const takeFrame: TakeFrame = () => {
+    return new Promise(async (resolve, reject) => {
+      const rec = await startRecording().catch(reject);
+      if (rec) {
+        setTimeout(() => {
+          stopRecording()
+            .then((res) => {
+              const photoName = changeExtension(res.result.outputURL, 'jpg');
+              const command = `-sseof -1 -i ${res.result.outputURL} -vsync 0 -q:v 1 -update true ${photoName}`;
+              RNFFmpeg.execute(command).then(() => {
+                res.result.outputURL = photoName;
+                resolve(res);
+              });
+            })
+            .catch(reject);
+        }, 1000);
+      }
+    });
+  };
+
   const cleanRecord: CleanRecord = () => {
     RecordScreen.clean();
   };
@@ -92,6 +113,7 @@ export const useRecordScreenZone = () => {
   return {
     startRecording,
     stopRecording,
+    takeFrame,
     cleanRecord,
     RecordScreenZone: Wrapper,
   };

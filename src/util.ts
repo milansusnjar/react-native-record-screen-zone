@@ -9,6 +9,12 @@ export const extractExtension = (file: string) => {
   return parseFileName[parseFileName.length - 1];
 };
 
+export const changeExtension = (path: string, newExtension: string) => {
+  const parsePath = path.split('.');
+  parsePath[parsePath.length - 1] = newExtension;
+  return parsePath.join('.');
+};
+
 export const createNewFilePath = (path: string) => {
   const parsePath = path.split('/');
   const fileName = parsePath[parsePath.length - 1];
